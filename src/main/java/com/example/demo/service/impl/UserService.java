@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,7 @@ public class UserService {
 
     public UserDTO newUser(UserDTO dto) {
         val user = converter.from(dto);
+        user.setName("VENDOR-1123-" + user.getName());
         val saved = repository.save(user);
         return converter.to(saved);
     }
