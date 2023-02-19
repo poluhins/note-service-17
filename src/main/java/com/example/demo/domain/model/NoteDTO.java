@@ -1,5 +1,6 @@
 package com.example.demo.domain.model;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.domain.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.domain.model.UserDTO;
 import com.example.demo.service.Converter;
+import com.example.demo.service.converter.UserMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,12 +17,16 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     UserRepository repository;
-    UserConverter converter;
+    Converter<User, UserDTO> converter;
 
     public UserDTO newUser(UserDTO dto) {
         val user = converter.from(dto);
         val saved = repository.save(user);
         return converter.to(saved);
+    }
+
+    public boolean exists(int userId) {
+        return repository.existsById(userId);
     }
 
     public UserDTO edit(int id, UserDTO dto) {
