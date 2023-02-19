@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.db.repository.UserRepository;
-import com.example.demo.model.UserDTO;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.domain.model.UserDTO;
 import com.example.demo.service.Converter;
-import com.example.demo.service.converter.UserConverter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,9 +18,9 @@ public class UserService {
     UserConverter converter;
 
     public UserDTO newUser(UserDTO dto) {
-        val user = converter.to(dto);
+        val user = converter.from(dto);
         val saved = repository.save(user);
-        return converter.from(saved);
+        return converter.to(saved);
     }
 
     public UserDTO edit(int id, UserDTO dto) {
@@ -31,11 +30,11 @@ public class UserService {
             return null;
         }
 
-        val user = converter.to(dto);
+        val user = converter.from(dto);
         val merged = Converter.merge(original, user);
         merged.setId(id);
         val result = repository.save(merged);
-        return converter.from(result);
+        return converter.to(result);
     }
 
 }

@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.db.repository.NoteRepository;
-import com.example.demo.db.repository.UserRepository;
-import com.example.demo.model.NoteDTO;
+import com.example.demo.domain.entity.Note;
+import com.example.demo.repository.NoteRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.domain.exception.NoteNotFoundException;
+import com.example.demo.domain.exception.UserNotFoundException;
+import com.example.demo.domain.model.NoteDTO;
 import com.example.demo.service.Converter;
-import com.example.demo.service.converter.NoteConverter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,16 +25,16 @@ public class NoteService {
 
     NoteRepository repository;
     UserRepository userRepository;
-    NoteConverter converter;
+    Converter<Note, NoteDTO> converter;
 
-    public NoteDTO newNote(int authorId, NoteDTO dto) {
+    public NoteDTO newNote(NoteDTO dto) throws UserNotFoundException {
         val note = converter.from(dto);
-        val result = userRepository.findById(authorId)
+        val result = userRepository.findById(dto.getAuthor().getId())
                 .map(a -> {
                     note.setAuthor(a);
                     return repository.save(note);
                 })
-                .orElse(null);
+                .orElseThrow(() -> new UserNotFoundException(dto.getAuthor().getId()));
         return converter.to(result);
     }
 
@@ -80,4 +82,11 @@ public class NoteService {
         return true;
     }
 
+    public NoteDTO findById(int id) throws NoteNotFoundException {
+
+        return repository.findById(id)
+                .map(converter::to)
+                .orElseThrow(() -> new NoteNotFoundException(id));
+
+    }
 }

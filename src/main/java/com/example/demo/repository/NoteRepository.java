@@ -1,22 +1,15 @@
-package com.example.demo.db.repository;
+package com.example.demo.repository;
 
-import com.example.demo.db.entity.Note;
+import com.example.demo.domain.entity.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
-@Repository
 public interface NoteRepository extends JpaRepository<Note, Integer> {
 
-    @Query(
-            value = "SELECT n " +
-                    "FROM Note n " +
-                    "WHERE n.author.id = :author_id"
-    )
-    Collection<Note> getAllByAuthorId(@Param("author_id") int authorId);
+    Collection<Note> getAllByAuthorId(int authorId);
 
     @Query(
             value = "SELECT count(n) " +

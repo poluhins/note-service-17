@@ -1,6 +1,7 @@
-package com.example.demo.model;
+package com.example.demo.domain.model;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NoteDTO implements Serializable {
 
